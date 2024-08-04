@@ -1,0 +1,33 @@
+.env
+node_modules
+venv
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment directory
+venv/
+env/
+backend/venv/
+
+# Ignore environment variables file
+.env
+
+# Ignore PyCharm project files
+.idea/
+
+# Ignore VSCode project files
+.vscode/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore MacOS system files
+.DS_Store
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore package managers
+node_modules/
