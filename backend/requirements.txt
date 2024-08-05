@@ -1,0 +1,17 @@
+flask
+flask_cors
+flask_mysql
+flask_mysqldb
+flask_bcrypt
+flask_jwt_extended 
+ai71 
+torch 
+torchvision 
+torchaudio
+transformers
+diffusers
+accelerate
+fpdf
+accelerate
+python-dotenv
+gunicorn
