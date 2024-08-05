@@ -18,7 +18,7 @@ const StoryForm = () => {
   const [imageLoading, setImageLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
-  const backendUrl = 'https://5a6f-2401-4900-1c43-65e9-29e7-ac0e-c0d1-2256.ngrok-free.app'; // Update with your IP address
+  const backendUrl = 'https://cfac-2401-4900-1c43-65e9-29e7-ac0e-c0d1-2256.ngrok-free.app'; // Update with your ngrok URL
 
   const handleGenerateImage = async () => {
     if (!displayedStory.trim()) {
@@ -281,19 +281,23 @@ const StoryForm = () => {
 
           <h2>Saved Stories</h2>
           <ul>
-            {stories.map(story => (
-              <li key={story.id}>
-                <input
-                  type="radio"
-                  name="selectedStory"
-                  value={story.id}
-                  onChange={() => setSelectedStoryId(story.id)}
-                  checked={selectedStoryId === story.id}
-                />
-                <span>{story.title}</span>
-                <button onClick={() => handleDeleteStory(story.id)}>Delete</button>
-              </li>
-            ))}
+            {stories.length > 0 ? (
+              stories.map(story => (
+                <li key={story.id}>
+                  <input
+                    type="radio"
+                    name="selectedStory"
+                    value={story.id}
+                    onChange={() => setSelectedStoryId(story.id)}
+                    checked={selectedStoryId === story.id}
+                  />
+                  <span>{story.title}</span>
+                  <button onClick={() => handleDeleteStory(story.id)}>Delete</button>
+                </li>
+              ))
+            ) : (
+              <li>No stories found.</li>
+            )}
           </ul>
           <button onClick={handleDisplayStory}>Display Story</button>
           {displayedStory && (
