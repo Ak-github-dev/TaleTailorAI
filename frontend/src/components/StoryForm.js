@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './StoryForm.css';
 
@@ -15,78 +15,63 @@ const StoryForm = () => {
   const [password, setPassword] = useState('');
   const [selectedStoryId, setSelectedStoryId] = useState(null);
   const [displayedStory, setDisplayedStory] = useState('');
-
-
-
-
-
-
   const [imageLoading, setImageLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
-const handleGenerateImage = async () => {
-  if (!displayedStory.trim()) {
-    alert('No story to generate image from');
-    return;
-  }
+  const backendUrl = 'https://5a6f-2401-4900-1c43-65e9-29e7-ac0e-c0d1-2256.ngrok-free.app'; // Update with your IP address
 
-  const prompt = displayedStory.split(' ').slice(0, 10).join(' '); // Take first 10 words as prompt
-  setImageLoading(true);
+  const handleGenerateImage = async () => {
+    if (!displayedStory.trim()) {
+      alert('No story to generate image from');
+      return;
+    }
 
-  try {
-    const response = await axios.post('http://localhost:5000/generate_image', {
-      prompt,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    setImageUrl(response.data.image_path);
-  } catch (error) {
-    console.error('There was an error generating the image!', error);
-    alert('There was an error generating the image!');
-  }
-  setImageLoading(false);
-};
+    const prompt = displayedStory.split(' ').slice(0, 10).join(' '); // Take first 10 words as prompt
+    setImageLoading(true);
 
+    try {
+      const response = await axios.post(`${backendUrl}/generate_image`, {
+        prompt,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setImageUrl(response.data.image_path);
+    } catch (error) {
+      console.error('There was an error generating the image!', error);
+      alert('There was an error generating the image!');
+    }
+    setImageLoading(false);
+  };
 
+  const handleSaveAsPdf = async () => {
+    if (!displayedStory.trim() || !title.trim()) {
+      alert('No story or title to save as PDF');
+      return;
+    }
 
-const handleSaveAsPdf = async () => {
-  if (!displayedStory.trim() || !title.trim()) {
-    alert('No story or title to save as PDF');
-    return;
-  }
-
-  try {
-    const response = await axios.post('http://localhost:5000/save_as_pdf', {
-      title,
-      text: displayedStory,
-      image_path: imageUrl,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    const link = document.createElement('a');
-    link.href = `http://localhost:5000/${response.data.pdf_path}`;
-    link.download = `${title}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (error) {
-    console.error('There was an error saving the PDF!', error);
-    alert('There was an error saving the PDF!');
-  }
-};
-
-
-
-
-
-
-
-
-
+    try {
+      const response = await axios.post(`${backendUrl}/save_as_pdf`, {
+        title,
+        text: displayedStory,
+        image_path: imageUrl,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const link = document.createElement('a');
+      link.href = `${backendUrl}/${response.data.pdf_path}`;
+      link.download = `${title}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('There was an error saving the PDF!', error);
+      alert('There was an error saving the PDF!');
+    }
+  };
 
   const handleChange = (index, event) => {
     const values = [...characters];
@@ -112,7 +97,7 @@ const handleSaveAsPdf = async () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/generate', {
+      const response = await axios.post(`${backendUrl}/generate`, {
         characters,
         scene,
         scenario,
@@ -142,7 +127,7 @@ const handleSaveAsPdf = async () => {
 
   const handleSave = async () => {
     try {
-      await axios.post('http://localhost:5000/save', {
+      await axios.post(`${backendUrl}/save`, {
         title,
         content: story,
       }, {
@@ -159,7 +144,7 @@ const handleSaveAsPdf = async () => {
 
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:5000/register', {
+      await axios.post(`${backendUrl}/register`, {
         username,
         password
       });
@@ -171,7 +156,7 @@ const handleSaveAsPdf = async () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/login', {
+      const response = await axios.post(`${backendUrl}/login`, {
         username,
         password
       });
@@ -185,7 +170,7 @@ const handleSaveAsPdf = async () => {
 
   const fetchStories = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/stories', {
+      const response = await axios.get(`${backendUrl}/stories`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -198,7 +183,7 @@ const handleSaveAsPdf = async () => {
 
   const handleDeleteStory = async (storyId) => {
     try {
-      await axios.delete(`http://localhost:5000/delete/${storyId}`, {
+      await axios.delete(`${backendUrl}/delete/${storyId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -213,7 +198,7 @@ const handleSaveAsPdf = async () => {
   const handleDisplayStory = async () => {
     if (selectedStoryId) {
       try {
-        const response = await axios.get(`http://localhost:5000/story/${selectedStoryId}`, {
+        const response = await axios.get(`${backendUrl}/story/${selectedStoryId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -318,7 +303,7 @@ const handleSaveAsPdf = async () => {
               <button onClick={() => handleCopy(displayedStory)}>Copy Displayed Story</button>
               <button onClick={handleGenerateImage}>Generate Image</button>
               {imageLoading && <div className="loading">Generating image...</div>}
-              {imageUrl && <img src={`http://localhost:5000/${imageUrl}`} alt="Generated" />}
+              {imageUrl && <img src={`${backendUrl}/${imageUrl}`} alt="Generated" />}
               <button onClick={handleSaveAsPdf}>Save as PDF</button>
             </div>
           )}

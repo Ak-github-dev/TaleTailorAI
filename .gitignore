@@ -31,3 +31,6 @@ backend/venv/
 
 # Ignore package managers
 node_modules/
+
+
+.vercel

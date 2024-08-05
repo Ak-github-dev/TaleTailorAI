@@ -1,9 +1,0 @@
-torch 
-torchvision 
-torchaudio
-transformers
-diffusers
-accelerate
-
-
-fpdf

@@ -30,7 +30,7 @@ app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
 
 
 # Load configuration from environment variables
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
 jwt = JWTManager(app)
